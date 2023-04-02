@@ -1,25 +1,24 @@
 import sys, csv
 
 def define_argument(argument):
-    if argument < 3: 
+    if len(argument) < 3: 
         sys.exit('Too few arguments are passed')
-    if argument > 3:
+    if len(argument) > 3:
         sys.exit('Too much arguments are passed')
     
-    return argument
+    if argument[1].split('.')[1] != 'csv':
+        sys.exit('Not a Csv file')
+    
 
 def main(argument):
     define_argument(argument)
-    try:
-        with open(argument[1], 'r') as csv_file:
-             reader = csv.DictReader(csv_file)
-             with open(argument[2], 'w', newline='') as new_csv:
-                fieldnames = ['first', 'last', 'house']
-                writer = csv.DictWriter(new_csv, fieldnames=fieldnames)
-                writer.writeheader()
-    except FileNotFoundError as e:
-        sys.exit(f'This {e} coud not search')
-    else:
+    with open(argument[1], 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
+        with open(argument[2], 'w', newline='') as new_csv:
+            fieldnames = ['first', 'last', 'house']
+            writer = csv.DictWriter(new_csv, fieldnames=fieldnames)
+            writer.writeheader()
+
         for element in reader:
             new_dict = {}
             name_parts = element['name'].split(',')
